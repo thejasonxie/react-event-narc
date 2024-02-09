@@ -30,7 +30,7 @@ type EventNarcContextType<T> =
     }
   | undefined;
 
-type FormattedEventLogs = Array<any>;
+type FormattedEventLogs = Array<any> | Record<string, any>;
 
 interface EventNarcProps {
   children: React.ReactNode;
@@ -46,7 +46,7 @@ interface EventNarcProps {
   clearLogsAfterMinutes?: number;
   clearLogsAfterNumberOfLogs?: number;
   maxLogCount?: number;
-  mode?: "development" | "production" | string;
+  mode?: "development" | "production" | "debug";
 }
 
 const EventNarcContext = createContext<EventNarcContextType<any>>(undefined);
@@ -63,7 +63,8 @@ export const EventNarc = ({
   clearLogsAfterMinutes,
   clearLogsAfterNumberOfLogs,
   maxLogCount,
-  mode = (process.env.NODE_ENV as string) || "development",
+  mode = (process.env.NODE_ENV as "production" | "development") ||
+    "development",
 }: EventNarcProps) => {
   const [narcEventLogs, setNarcEventLogs] = useState<NarcEventLogs<any>>([]);
 
@@ -72,19 +73,19 @@ export const EventNarc = ({
 
   useEffect(() => {
     return () => {
-      console.log("Unmounting EventNarc");
-      // setNarcEventLogs([]);
+      setNarcEventLogs([]);
     };
   }, []);
 
   useEffect(() => {
-    if (narcEventLogs.length == 0) return;
-    const lastLog = narcEventLogs[narcEventLogs.length - 1];
-    if (mode != "production") {
-      // console.log(`EventNarc Log #${narcEventLogs.length}: \n`, lastLog);
-    }
-    if (onNewEventLog) {
-      onNewEventLog(lastLog, narcEventLogs);
+    if (narcEventLogs.length > 0) {
+      const lastLog = narcEventLogs[narcEventLogs.length - 1];
+      if (mode === "debug") {
+        console.log(`EventNarc Log #${narcEventLogs.length}: \n`, lastLog);
+      }
+      if (onNewEventLog) {
+        onNewEventLog(lastLog, narcEventLogs);
+      }
     }
 
     if (
@@ -95,8 +96,6 @@ export const EventNarc = ({
     ) {
       throw new Error("informTo is required when informOn is provided");
     }
-
-    console.log("narcEventLogs", narcEventLogs);
   }, [informOn, narcEventLogs, mode, onNewEventLog]);
 
   useEffect(() => {
@@ -163,10 +162,10 @@ export const EventNarc = ({
         );
       }
       if (formatter) {
-        trackedData = formatter(trackedData);
+        informTo(formatter(trackedData));
+      } else {
+        informTo(trackedData);
       }
-
-      informTo(trackedData);
 
       if (clearLogsAfterInforming) {
         setNarcEventLogs([]);

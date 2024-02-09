@@ -3,11 +3,31 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
+import {
+  EventNarc,
+  InformOnErrorEvents,
+  InformOnKeyboardEvents,
+  InformOnMouseEvents,
+  InformOnNetworkEvents,
+} from "./components";
+
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <EventNarc
+      informOn={(data) => {
+        console.log("informing 1: ", data);
+        return data.eventType === "error" || data.eventType === "keydown";
+      }}
+      informTo={(data) => console.log("informing 2: ", data)}
+    >
+      <InformOnMouseEvents />
+      <InformOnErrorEvents />
+      <InformOnKeyboardEvents />
+      <InformOnNetworkEvents
+        shouldLogEvent={(response) => response.status != 200}
+      />
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -21,6 +41,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
@@ -28,7 +49,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>
+    </EventNarc>
   );
 }
 

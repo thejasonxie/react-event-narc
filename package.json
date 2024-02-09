@@ -1,8 +1,19 @@
 {
   "name": "react-event-narc",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "private": false,
+  "version": "0.0.2",
+  "author": "Jason Xie",
+  "description": "A simple and flexible event tracker for react without any bloat",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thejasonxie/react-event-narc"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -24,6 +35,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vite-plugin-dts": "^3.7.2"
   }
 }
