@@ -1,7 +1,7 @@
 {
   "name": "react-event-narc",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Jason Xie",
   "description": "A simple and flexible event tracker for react without any bloat",
   "main": "dist/index.umd.js",

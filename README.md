@@ -1,5 +1,7 @@
 # React Event Narc
 
+[Documentation](https://tsdocs.dev/docs/react-event-narc)
+
 A simple and flexible event tracker for React without any bloat. Have a narc inform you of critical user events in your application.
 
 ## Status
